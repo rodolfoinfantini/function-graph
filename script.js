@@ -1,12 +1,17 @@
 'use strict'
 import Graph from './Graph.js'
 
-const input = document.querySelector('input')
+const input = document.querySelector('input.function')
 const button = document.querySelector('button')
 
+const widthInput = document.querySelector('input.x')
+const widthSpan = document.querySelector('span.x')
+const heightInput = document.querySelector('input.y')
+const heightSpan = document.querySelector('span.y')
+
 const canvas = document.createElement('canvas')
-canvas.width = 800
-canvas.height = 800
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
 const ctx = canvas.getContext('2d')
 document.body.appendChild(canvas)
 
@@ -15,8 +20,7 @@ function f(x) {
     let treatedFunc = func.replaceAll(' ', '').trim()
     if (treatedFunc.length === 0) {
         stop = true
-        alert('Invalid function')
-        return
+        return //alert('Invalid function')
     }
 
     const multiplications = treatedFunc.match(/-?[\d.e]+x/g)
@@ -28,32 +32,45 @@ function f(x) {
 
     treatedFunc = treatedFunc.replaceAll('x', x)
     treatedFunc = treatedFunc.replaceAll('--', '+')
+    treatedFunc = treatedFunc.replace(/(PI|pi)/g, Math.PI)
 
-    const squareRoots = treatedFunc.match(/sqrt\([\d-.e]+\)/g)
+    const squareRoots = treatedFunc.match(/sqrt\(.+\)/g)
     if (squareRoots)
         squareRoots.forEach((root) => {
-            const rootNumber = root.match(/[\d-.e]+/)[0]
+            let rootNumber = root.match(/\((.*?)\)/)[1]
+            try {
+                rootNumber = eval(rootNumber)
+            } catch (error) {}
             treatedFunc = treatedFunc.replace(root, Math.sqrt(rootNumber))
         })
 
-    const sins = treatedFunc.match(/sin\([\d-.e]+\)/g)
+    const sins = treatedFunc.match(/sin\(.+\)/g)
     if (sins)
         sins.forEach((sin) => {
-            const sinNumber = sin.match(/[\d-.e]+/)[0]
+            let sinNumber = sin.match(/\((.*?)\)/)[1]
+            try {
+                sinNumber = eval(sinNumber)
+            } catch (error) {}
             treatedFunc = treatedFunc.replace(sin, Math.sin(sinNumber))
         })
 
-    const coss = treatedFunc.match(/cos\([\d-.e]+\)/g)
+    const coss = treatedFunc.match(/cos\(.+\)/g)
     if (coss)
         coss.forEach((cos) => {
-            const cosNumber = cos.match(/[\d-.e]+/)[0]
+            let cosNumber = cos.match(/\((.*?)\)/)[1]
+            try {
+                cosNumber = eval(cosNumber)
+            } catch (error) {}
             treatedFunc = treatedFunc.replace(cos, Math.cos(cosNumber))
         })
 
-    const tans = treatedFunc.match(/tan\([\d-.e]+\)/g)
+    const tans = treatedFunc.match(/tan\(.+\)/g)
     if (tans)
         tans.forEach((tan) => {
-            const tanNumber = tan.match(/[\d-.e]+/)[0]
+            let tanNumber = tan.match(/\((.*?)\)/)[1]
+            try {
+                tanNumber = eval(tanNumber)
+            } catch (error) {}
             treatedFunc = treatedFunc.replace(tan, Math.tan(tanNumber))
         })
 
@@ -81,21 +98,37 @@ function f(x) {
     try {
         return eval(treatedFunc)
     } catch (e) {
-        console.error(e)
-        console.log(treatedFunc)
+        // console.error(e)
+        // console.log(treatedFunc)
         stop = true
-        alert('Invalid function')
+        // alert('Invalid function')
     }
 }
 
 let stop = false
 
-const w = 30
-const h = 30
+let w = 50
+let h = 50
 
-const graph = new Graph(ctx, w, h, canvas.width, canvas.height)
+let graph
+
+function setup() {
+    graph = new Graph(ctx, w, h, canvas.width, canvas.height)
+    run()
+}
+
+widthInput.oninput = debounce(setup, 300, () => {
+    widthSpan.textContent = 'Graph width: ' + widthInput.value
+    w = +widthInput.value
+})
+
+heightInput.oninput = debounce(setup, 300, () => {
+    heightSpan.textContent = 'Graph height: ' + heightInput.value
+    h = +heightInput.value
+})
 
 function run() {
+    func = input.value
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     graph.drawAxes()
     const lastPoint = {
@@ -118,9 +151,26 @@ function run() {
     }
 }
 
-button.onclick = () => {
-    func = input.value
-    run()
-}
+button.onclick = run
 
-run()
+input.oninput = debounce(run, 200)
+
+setup()
+
+window.onresize = debounce(() => {
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    setup()
+})
+
+function debounce(cb, delay = 200, ignoredCb) {
+    let timeout
+
+    return (...args) => {
+        if (ignoredCb) ignoredCb()
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+            cb(...args)
+        }, delay)
+    }
+}

@@ -31,24 +31,24 @@ export default class Graph {
             const spacing = this.realWidth / this.width
             const x = i * spacing
             const y = this.realHeight / 2
-            this.ctx.fillText(xNumber, x - 3, y + 15)
+            if (spacing > 13) this.ctx.fillText(xNumber, x - 3, y + 15)
             this.ctx.moveTo(x, y - divisorLength)
             this.ctx.lineTo(x, y + divisorLength)
             this.ctx.stroke()
             xNumber++
         }
 
-        let yNumber = -(this.height / 2)
+        let yNumber = this.height / 2
         for (let i = 0; i <= this.height; i++) {
             this.ctx.beginPath()
             const spacing = this.realHeight / this.height
             const x = this.realWidth / 2
             const y = i * spacing
-            this.ctx.fillText(yNumber, x + 5, y + 3)
+            if (spacing > 13) this.ctx.fillText(yNumber, x + 5, y + 3)
             this.ctx.moveTo(x - divisorLength, y)
             this.ctx.lineTo(x + divisorLength, y)
             this.ctx.stroke()
-            yNumber++
+            yNumber--
         }
     }
 
@@ -60,13 +60,14 @@ export default class Graph {
         this.ctx.lineWidth = 2
         const centerX = this.realWidth / 2
         const centerY = this.realHeight / 2
-        const spacing = this.realHeight / this.height
-        x1 = centerX + x1 * spacing
-        y1 = centerY - y1 * spacing
-        x2 = centerX + x2 * spacing
-        y2 = centerY - y2 * spacing
+        const spacingX = this.realWidth / this.width
+        const spacingY = this.realHeight / this.height
+        x1 = centerX + x1 * spacingX
+        y1 = centerY - y1 * spacingY
+        x2 = centerX + x2 * spacingX
+        y2 = centerY - y2 * spacingY
 
-        this.ctx.strokeStyle = 'rgba(155, 0, 0, 1)'
+        this.ctx.strokeStyle = 'rgba(200, 0, 0, 1)'
         this.ctx.beginPath()
         this.ctx.moveTo(x1, y1)
         this.ctx.lineTo(x2, y2)

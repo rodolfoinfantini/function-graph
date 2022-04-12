@@ -9,7 +9,27 @@
         <script src="script.js" defer type="module"></script>
     </head>
     <body>
-        <input type="text" value="-2x^2+3x+2" />
-        <button>Run</button>
+        <div class="controls">
+            <input type="text" class="function" value="-2x^2+3x+2" />
+            <button>Run</button>
+            <span class="x">Graph width: 50</span>
+            <input
+                class="x"
+                type="range"
+                min="2"
+                max="200"
+                value="50"
+                step="1"
+            />
+            <span class="y">Graph height: 50</span>
+            <input
+                class="y"
+                type="range"
+                min="2"
+                max="200"
+                value="50"
+                step="1"
+            />
+        </div>
     </body>
 </html>
