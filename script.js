@@ -2,6 +2,7 @@
 import Graph from './Graph.js'
 
 const input = document.querySelector('input.function')
+const centerButton = document.querySelector('button.center')
 // const button = document.querySelector('button')
 
 const widthInput = document.querySelector('input.x')
@@ -113,6 +114,8 @@ let h = 50
 let graph
 
 function setup() {
+    zoom = 1
+    ctx.restore()
     graph = new Graph(ctx, w, h, canvas.width, canvas.height)
     run()
 }
@@ -129,7 +132,12 @@ heightInput.oninput = debounce(setup, 300, () => {
 
 function run() {
     func = input.value
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.clearRect(
+        -(canvas.width * 100),
+        -(canvas.height * 100),
+        canvas.width * 1000,
+        canvas.height * 1000
+    )
     graph.drawAxes()
     const lastPoint = {
         x: null,
@@ -155,7 +163,41 @@ function run() {
 
 input.oninput = debounce(run, 200)
 
-setup()
+let isMouseDown = false
+let zoom = 1
+
+const lastMousePos = { x: null, y: null }
+document.body.onmousemove = (e) => {
+    if (lastMousePos.x === null || !isMouseDown) {
+        lastMousePos.x = e.clientX
+        lastMousePos.y = e.clientY
+        return
+    }
+    const xDistance = (e.clientX - lastMousePos.x) / zoom
+    const yDistance = (e.clientY - lastMousePos.y) / zoom
+    ctx.translate(xDistance, yDistance)
+    run()
+    lastMousePos.x = e.clientX
+    lastMousePos.y = e.clientY
+}
+canvas.onmousedown = () => {
+    isMouseDown = true
+}
+canvas.onmouseup = () => {
+    isMouseDown = false
+}
+canvas.onmouseleave = canvas.onmouseup
+
+centerButton.onclick = () => {
+    setup()
+}
+
+document.body.onwheel = (e) => {
+    const ratio = e.deltaY > 0 ? 0.9 : 1.1
+    zoom *= ratio
+    ctx.scale(ratio, ratio)
+    run()
+}
 
 window.onresize = debounce(() => {
     canvas.width = window.innerWidth
@@ -174,3 +216,5 @@ function debounce(cb, delay = 200, ignoredCb) {
         }, delay)
     }
 }
+
+setup()
