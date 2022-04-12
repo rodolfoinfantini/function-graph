@@ -2,7 +2,7 @@
 import Graph from './Graph.js'
 
 const input = document.querySelector('input.function')
-const button = document.querySelector('button')
+// const button = document.querySelector('button')
 
 const widthInput = document.querySelector('input.x')
 const widthSpan = document.querySelector('span.x')
@@ -151,7 +151,7 @@ function run() {
     }
 }
 
-button.onclick = run
+// button.onclick = run
 
 input.oninput = debounce(run, 200)
 
