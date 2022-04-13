@@ -11,6 +11,7 @@ body {
     background-color: #000;
     overflow: hidden;
     color: white;
+    font-size: 1.1rem;
 }
 
 .controls {
@@ -37,7 +38,7 @@ canvas {
 input,
 button {
     padding: 5px 10px;
-    font-size: 1rem;
+    font-size: 1.1rem;
 }
 
 input {

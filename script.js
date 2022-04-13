@@ -209,7 +209,7 @@ function debounce(cb, delay = 200, ignoredCb) {
     let timeout
 
     return (...args) => {
-        if (ignoredCb) ignoredCb()
+        if (ignoredCb) ignoredCb(...args)
         clearTimeout(timeout)
         timeout = setTimeout(() => {
             cb(...args)
