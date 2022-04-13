@@ -24,6 +24,8 @@ function f(x) {
         return //alert('Invalid function')
     }
 
+    treatedFunc = treatedFunc.replace(/(PI|pi)/g, Math.PI)
+
     const multiplications = treatedFunc.match(/-?[\d.e]+x/g)
     if (multiplications)
         multiplications.forEach((multiplication) => {
@@ -33,7 +35,6 @@ function f(x) {
 
     treatedFunc = treatedFunc.replaceAll('x', x)
     treatedFunc = treatedFunc.replaceAll('--', '+')
-    treatedFunc = treatedFunc.replace(/(PI|pi)/g, Math.PI)
 
     const squareRoots = treatedFunc.match(/sqrt\(.+\)/g)
     if (squareRoots)
