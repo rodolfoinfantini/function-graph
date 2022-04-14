@@ -13,11 +13,11 @@ export default class Graph {
         this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
         this.ctx.beginPath()
 
-        this.ctx.moveTo(0, -this.realHeight * 10)
-        this.ctx.lineTo(0, this.realHeight * 10)
+        this.ctx.moveTo(0, -this.realHeight / 2)
+        this.ctx.lineTo(0, this.realHeight / 2)
 
-        this.ctx.moveTo(-this.realWidth * 10, 0)
-        this.ctx.lineTo(this.realWidth * 10, 0)
+        this.ctx.moveTo(-this.realWidth / 2, 0)
+        this.ctx.lineTo(this.realWidth / 2, 0)
 
         this.ctx.stroke()
 

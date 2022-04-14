@@ -45,3 +45,7 @@ input {
     width: 500px;
     max-width: 100%;
 }
+
+button {
+    display: none;
+}

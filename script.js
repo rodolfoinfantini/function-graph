@@ -1,9 +1,11 @@
 'use strict'
 import Graph from './Graph.js'
+import { inputToValidMath } from './functionManipulations.js'
+
+const precision = 0.1
 
 const input = document.querySelector('input.function')
 const centerButton = document.querySelector('button.center')
-// const button = document.querySelector('button')
 
 const widthInput = document.querySelector('input.x')
 const widthSpan = document.querySelector('span.x')
@@ -21,89 +23,16 @@ function f(x) {
     let treatedFunc = func.replaceAll(' ', '').trim()
     if (treatedFunc.length === 0) {
         stop = true
-        return //alert('Invalid function')
+        return
     }
 
-    treatedFunc = treatedFunc.replace(/(PI|pi)/g, Math.PI)
-
-    const multiplications = treatedFunc.match(/-?[\d.e]+x/g)
-    if (multiplications)
-        multiplications.forEach((multiplication) => {
-            const number = multiplication.match(/[\d-.e]+/)[0]
-            treatedFunc = treatedFunc.replace(multiplication, `${number}*x`)
-        })
-
-    treatedFunc = treatedFunc.replaceAll('x', x)
-    treatedFunc = treatedFunc.replaceAll('--', '+')
-
-    const squareRoots = treatedFunc.match(/sqrt\(.+\)/g)
-    if (squareRoots)
-        squareRoots.forEach((root) => {
-            let rootNumber = root.match(/\((.*?)\)/)[1]
-            try {
-                rootNumber = eval(rootNumber)
-            } catch (error) {}
-            treatedFunc = treatedFunc.replace(root, Math.sqrt(rootNumber))
-        })
-
-    const sins = treatedFunc.match(/sin\(.+\)/g)
-    if (sins)
-        sins.forEach((sin) => {
-            let sinNumber = sin.match(/\((.*?)\)/)[1]
-            try {
-                sinNumber = eval(sinNumber)
-            } catch (error) {}
-            treatedFunc = treatedFunc.replace(sin, Math.sin(sinNumber))
-        })
-
-    const coss = treatedFunc.match(/cos\(.+\)/g)
-    if (coss)
-        coss.forEach((cos) => {
-            let cosNumber = cos.match(/\((.*?)\)/)[1]
-            try {
-                cosNumber = eval(cosNumber)
-            } catch (error) {}
-            treatedFunc = treatedFunc.replace(cos, Math.cos(cosNumber))
-        })
-
-    const tans = treatedFunc.match(/tan\(.+\)/g)
-    if (tans)
-        tans.forEach((tan) => {
-            let tanNumber = tan.match(/\((.*?)\)/)[1]
-            try {
-                tanNumber = eval(tanNumber)
-            } catch (error) {}
-            treatedFunc = treatedFunc.replace(tan, Math.tan(tanNumber))
-        })
-
-    const powers = treatedFunc.match(/[\d-.e]+\^-?[\d.e]+/g)
-    if (powers)
-        powers.forEach((power) => {
-            const powerNumber = power.split('^')[0]
-            const powerExponent = power.split('^')[1]
-            treatedFunc = treatedFunc.replace(
-                power,
-                Math.pow(+powerNumber, +powerExponent)
-            )
-        })
-
-    const abs = treatedFunc.match(/\|[\d-.e]+\|/g)
-    if (abs)
-        abs.forEach((absNumber) => {
-            const absNumberNumber = absNumber.match(/[\d-.e]+/)[0]
-            treatedFunc = treatedFunc.replace(
-                absNumber,
-                Math.abs(absNumberNumber)
-            )
-        })
+    treatedFunc = inputToValidMath(treatedFunc, x)
 
     try {
         return eval(treatedFunc)
     } catch (e) {
-        // console.error(e)
-        // console.log(treatedFunc)
         stop = true
-        // alert('Invalid function')
+        return
     }
 }
 
@@ -125,26 +54,32 @@ widthInput.oninput = debounce(setup, 300, () => {
     widthSpan.textContent = 'Graph width: ' + widthInput.value
     w = +widthInput.value
 })
+widthInput.oninput()
 
 heightInput.oninput = debounce(setup, 300, () => {
     heightSpan.textContent = 'Graph height: ' + heightInput.value
     h = +heightInput.value
 })
+heightInput.oninput()
 
-function run() {
-    func = input.value
+function reset() {
     ctx.clearRect(
         -(canvas.width * 100),
         -(canvas.height * 100),
         canvas.width * 1000,
         canvas.height * 1000
     )
+}
+
+function run() {
+    func = input.value
+    reset()
     graph.drawAxes()
     const lastPoint = {
         x: null,
         y: null,
     }
-    for (let i = -w / 2; i <= w / 2; i += 0.1) {
+    for (let i = -w / 2; i <= w / 2; i += precision) {
         if (stop) {
             stop = false
             break
@@ -169,6 +104,7 @@ let zoom = 1
 
 const lastMousePos = { x: null, y: null }
 document.body.onmousemove = (e) => {
+    return
     if (lastMousePos.x === null || !isMouseDown) {
         lastMousePos.x = e.clientX
         lastMousePos.y = e.clientY
@@ -176,8 +112,14 @@ document.body.onmousemove = (e) => {
     }
     const xDistance = (e.clientX - lastMousePos.x) / zoom
     const yDistance = (e.clientY - lastMousePos.y) / zoom
-    ctx.translate(xDistance, yDistance)
-    run()
+    const image = new Image()
+    image.onload = () => {
+        ctx.translate(xDistance, yDistance)
+        reset()
+        ctx.drawImage(image, 0, 0)
+    }
+    image.src = canvas.toDataURL()
+    // run()
     lastMousePos.x = e.clientX
     lastMousePos.y = e.clientY
 }
