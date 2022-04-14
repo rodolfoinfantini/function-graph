@@ -26,6 +26,8 @@ function hasInvalidOperators(input) {
 }
 
 function multiplications(input) {
+    if (input.startsWith('-x')) input = input.replace('-x', '-1x')
+
     const multiplications = input.match(/-?[\d.e]+x/g)
     if (multiplications)
         multiplications.forEach((multiplication) => {
@@ -35,11 +37,13 @@ function multiplications(input) {
     return input
 }
 
-function genericFunction(input, current, mathFunc, regex = /\((.*?)\)/) {
+function genericFunction(input, current, mathFunc, regex /* = /\((.*?)\)/*/) {
+    current = current.replace(/\)+/, '')
+    if (!current.endsWith(')'))
+        current += ')'.repeat(current.match(/\(/g).length)
     let currentNumber = regex
         ? current.match(regex)[1]
         : current.replace(/^[^(]*\(/, '').slice(0, -1)
-    // let currentNumber = current.match(regex)[1]
     try {
         if (hasInvalidOperators(currentNumber)) throw new Error()
         currentNumber = eval(currentNumber)
@@ -52,14 +56,14 @@ function genericFunction(input, current, mathFunc, regex = /\((.*?)\)/) {
 }
 
 function sqrt(input) {
-    const squareRootsSquared = input.match(/sqrt\(.+\)\^2/g)
+    const squareRootsSquared = input.match(/sqrt\([^\)]*\)\^2/g)
     if (squareRootsSquared)
         for (const sRoot of squareRootsSquared) {
             const sRootNumber = sRoot.match(/\((.*?)\)/)[1]
             input = input.replace(sRoot, sRootNumber)
         }
 
-    const squareRoots = input.match(/sqrt\(.+\)/g)
+    const squareRoots = input.match(/sqrt\([^\)]*\)/g)
     if (squareRoots)
         for (const root of squareRoots)
             input = genericFunction(input, root, Math.sqrt)
@@ -68,7 +72,7 @@ function sqrt(input) {
 }
 
 function sin(input) {
-    const sins = input.match(/sin\(.+\)/g)
+    const sins = input.match(/sin\([^\)]*\)/g)
     if (sins)
         for (const sin of sins) input = genericFunction(input, sin, Math.sin)
 
@@ -76,7 +80,7 @@ function sin(input) {
 }
 
 function cos(input) {
-    const coss = input.match(/cos\(.+\)/g)
+    const coss = input.match(/cos\([^\)]*\)/g)
     if (coss)
         for (const cos of coss) input = genericFunction(input, cos, Math.cos)
 
@@ -84,7 +88,7 @@ function cos(input) {
 }
 
 function tan(input) {
-    const tans = input.match(/tan\(.+\)/g)
+    const tans = input.match(/tan\([^\)]*\)/g)
     if (tans)
         for (const tan of tans) input = genericFunction(input, tan, Math.tan)
 

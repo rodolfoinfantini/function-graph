@@ -7,8 +7,8 @@ const precision = 0.1
 const input = document.querySelector('input.function')
 const centerButton = document.querySelector('button.center')
 
-const widthInput = document.querySelector('input.x')
-const widthSpan = document.querySelector('span.x')
+// const widthInput = document.querySelector('input.x')
+// const widthSpan = document.querySelector('span.x')
 const heightInput = document.querySelector('input.y')
 const heightSpan = document.querySelector('span.y')
 
@@ -50,15 +50,15 @@ function setup() {
     run()
 }
 
-widthInput.oninput = debounce(setup, 300, () => {
-    widthSpan.textContent = 'Graph width: ' + widthInput.value
-    w = +widthInput.value
-})
-widthInput.oninput()
+// widthInput.oninput = debounce(setup, 300, () => {
+//     widthSpan.textContent = 'Graph width: ' + widthInput.value
+//     w = +widthInput.value
+// })
+// widthInput.oninput()
 
 heightInput.oninput = debounce(setup, 300, () => {
-    heightSpan.textContent = 'Graph height: ' + heightInput.value
     h = +heightInput.value
+    heightSpan.textContent = `Graph height: ${h} (-${h / 2} .. ${h / 2})`
 })
 heightInput.oninput()
 
@@ -79,7 +79,7 @@ function run() {
         x: null,
         y: null,
     }
-    for (let i = -w / 2; i <= w / 2; i += precision) {
+    for (let i = -graph.width / 2; i <= graph.width / 2; i += precision) {
         if (stop) {
             stop = false
             break
@@ -104,7 +104,6 @@ let zoom = 1
 
 const lastMousePos = { x: null, y: null }
 document.body.onmousemove = (e) => {
-    return
     if (lastMousePos.x === null || !isMouseDown) {
         lastMousePos.x = e.clientX
         lastMousePos.y = e.clientY
@@ -112,14 +111,14 @@ document.body.onmousemove = (e) => {
     }
     const xDistance = (e.clientX - lastMousePos.x) / zoom
     const yDistance = (e.clientY - lastMousePos.y) / zoom
-    const image = new Image()
-    image.onload = () => {
-        ctx.translate(xDistance, yDistance)
-        reset()
-        ctx.drawImage(image, 0, 0)
-    }
-    image.src = canvas.toDataURL()
-    // run()
+    // const image = new Image()
+    // image.onload = () => {
+    ctx.translate(xDistance, yDistance)
+    // reset()
+    // ctx.drawImage(image, 0, 0)
+    // }
+    // image.src = canvas.toDataURL()
+    run()
     lastMousePos.x = e.clientX
     lastMousePos.y = e.clientY
 }

@@ -21,40 +21,75 @@ export default class Graph {
 
         this.ctx.stroke()
 
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 1)'
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
         this.ctx.lineWidth = 1
 
-        const divisorLength = 2
+        const linesColor = 'rgba(255, 255, 255, 0.05)'
 
-        let xNumber = -(this.width / 2)
+        const ySpacing = this.realHeight / this.height
+        // const xSpacing = this.realWidth / this.width
+        const xSpacing = ySpacing
+        this.width = Math.ceil(this.realWidth / xSpacing)
+
+        /* let xNumber = -(this.width / 2)
         for (let i = 0; i <= this.width; i++) {
             this.ctx.beginPath()
-            const spacing = this.realWidth / this.width
-            const x = i * spacing - this.realWidth / 2
+            const x = i * xSpacing - this.realWidth / 2
             const y = 0
-            if (spacing > 13) this.ctx.fillText(xNumber, x - 3, y + 15)
-            this.ctx.moveTo(x, y - divisorLength)
-            this.ctx.lineTo(x, y + divisorLength)
+            if (xSpacing > 13) this.ctx.fillText(xNumber, x - 3, y + 15)
+
+            this.ctx.beginPath()
+            this.ctx.strokeStyle = linesColor
+            this.ctx.moveTo(x, -this.realHeight / 2)
+            this.ctx.lineTo(x, this.realHeight / 2)
             this.ctx.stroke()
+
             xNumber++
+        } */
+        for (let i = 0; i < this.width / 2; i++) {
+            this.ctx.beginPath()
+            const x = i * xSpacing
+            const y = 0
+            if (xSpacing > 13) this.ctx.fillText(i, x - 3, y + 15)
+
+            this.ctx.beginPath()
+            this.ctx.strokeStyle = linesColor
+            this.ctx.moveTo(x, -this.realHeight / 2)
+            this.ctx.lineTo(x, this.realHeight / 2)
+            this.ctx.stroke()
+        }
+        for (let i = 0; i < this.width / 2; i++) {
+            this.ctx.beginPath()
+            const x = -(i * xSpacing)
+            const y = 0
+            if (xSpacing > 13) this.ctx.fillText(i, x - 3, y + 15)
+
+            this.ctx.beginPath()
+            this.ctx.strokeStyle = linesColor
+            this.ctx.moveTo(x, -this.realHeight / 2)
+            this.ctx.lineTo(x, this.realHeight / 2)
+            this.ctx.stroke()
         }
 
         let yNumber = this.height / 2
         for (let i = 0; i <= this.height; i++) {
             this.ctx.beginPath()
-            const spacing = this.realHeight / this.height
             const x = 0
-            const y = i * spacing - this.realHeight / 2
-            if (spacing > 13) this.ctx.fillText(yNumber, x + 5, y + 3)
-            this.ctx.moveTo(x - divisorLength, y)
-            this.ctx.lineTo(x + divisorLength, y)
+            const y = i * ySpacing - this.realHeight / 2
+            if (ySpacing > 13) this.ctx.fillText(yNumber, x + 5, y + 3)
+
+            this.ctx.strokeStyle = linesColor
+            this.ctx.moveTo(-this.realWidth / 2, y)
+            this.ctx.lineTo(this.realWidth / 2, y)
             this.ctx.stroke()
+
             yNumber--
         }
     }
 
     drawLine(x1, y1, x2, y2) {
+        if (Math.abs(y1) > this.height / 2 && Math.abs(y2) > this.height / 2)
+            return
         this.ctx.lineWidth = 2
         const spacingX = this.realWidth / this.width
         const spacingY = this.realHeight / this.height
