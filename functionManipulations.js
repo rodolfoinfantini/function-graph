@@ -22,7 +22,7 @@ function everything(input) {
 }
 
 function hasInvalidOperators(input) {
-    return input.match(/[a-zA-Z\^]/g) !== null
+    return input.match(/[a-zA-Z\^\|]/g) !== null
 }
 
 function multiplications(input) {
@@ -37,13 +37,14 @@ function multiplications(input) {
     return input
 }
 
-function genericFunction(input, current, mathFunc, regex /* = /\((.*?)\)/*/) {
-    current = current.replace(/\)+/, '')
-    if (!current.endsWith(')'))
-        current += ')'.repeat(current.match(/\(/g).length)
-    let currentNumber = regex
-        ? current.match(regex)[1]
-        : current.replace(/^[^(]*\(/, '').slice(0, -1)
+function genericFunction(input, current, mathFunc, regex = /\)+/) {
+    current = current.replace(regex, '')
+    const parentheses = current.match(/\(/g)
+    if (!current.endsWith(')') && parentheses !== null)
+        current += ')'.repeat(parentheses.length)
+    let currentNumber = parentheses
+        ? current.replace(/^[^(]*\(/, '').slice(0, -1)
+        : current.replace(/^[^|]*\|/, '').slice(0, -1)
     try {
         if (hasInvalidOperators(currentNumber)) throw new Error()
         currentNumber = eval(currentNumber)
@@ -72,36 +73,33 @@ function sqrt(input) {
 }
 
 function sin(input) {
-    const sins = input.match(/sin\([^\)]*\)/g)
-    if (sins)
-        for (const sin of sins) input = genericFunction(input, sin, Math.sin)
+    const sin = input.match(/sin\([^\)]*\)/g)
+    if (sin) for (const s of sin) input = genericFunction(input, s, Math.sin)
 
     return input
 }
 
 function cos(input) {
-    const coss = input.match(/cos\([^\)]*\)/g)
-    if (coss)
-        for (const cos of coss) input = genericFunction(input, cos, Math.cos)
+    const cos = input.match(/cos\([^\)]*\)/g)
+    if (cos) for (const c of cos) input = genericFunction(input, c, Math.cos)
 
     return input
 }
 
 function tan(input) {
-    const tans = input.match(/tan\([^\)]*\)/g)
-    if (tans)
-        for (const tan of tans) input = genericFunction(input, tan, Math.tan)
+    const tan = input.match(/tan\([^\)]*\)/g)
+    if (tan) for (const t of tan) input = genericFunction(input, t, Math.tan)
 
     return input
 }
 
 function power(input) {
-    const powers = input.match(/[\d-.e]+\^-?[\d.e]+/g)
-    if (powers) {
-        powers.forEach((power) => {
-            const powerNumber = power.split('^')[0]
-            const powerExponent = power.split('^')[1]
-            input = input.replace(power, Math.pow(+powerNumber, +powerExponent))
+    const power = input.match(/[\d-.e]+\^-?[\d.e]+/g)
+    if (power) {
+        power.forEach((p) => {
+            const powerNumber = p.split('^')[0]
+            const powerExponent = p.split('^')[1]
+            input = input.replace(p, Math.pow(+powerNumber, +powerExponent))
         })
         input = everything(input)
     }
@@ -111,9 +109,7 @@ function power(input) {
 
 function abs(input) {
     const abs = input.match(/\|.+\|/g)
-    if (abs)
-        for (const a of abs)
-            input = genericFunction(input, a, Math.abs, /\|(.*?)\|/)
+    if (abs) for (const a of abs) input = genericFunction(input, a, Math.abs)
 
     return input
 }
