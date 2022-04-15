@@ -12,11 +12,11 @@ export function inputToValidMath(input, x) {
 }
 
 function everything(input) {
+    input = power(input)
     input = sqrt(input)
     input = sin(input)
     input = cos(input)
     input = tan(input)
-    input = power(input)
     input = abs(input)
     return input
 }
@@ -57,59 +57,89 @@ function genericFunction(input, current, mathFunc, regex = /\)+/) {
 }
 
 function sqrt(input) {
+    /*
     const squareRootsSquared = input.match(/sqrt\([^\)]*\)\^2/g)
     if (squareRootsSquared)
         for (const sRoot of squareRootsSquared) {
             const sRootNumber = sRoot.match(/\((.*?)\)/)[1]
             input = input.replace(sRoot, sRootNumber)
         }
+        const squareRoots = input.match(/sqrt\([^\)]*\)/g)
+        if (squareRoots)
+            for (const root of squareRoots)
+                input = genericFunction(input, root, Math.sqrt)
+    */
 
-    const squareRoots = input.match(/sqrt\([^\)]*\)/g)
-    if (squareRoots)
-        for (const root of squareRoots)
-            input = genericFunction(input, root, Math.sqrt)
-
+    input = input.replaceAll('sqrt', 'Math.sqrt')
     return input
 }
 
 function sin(input) {
+    /*
     const sin = input.match(/sin\([^\)]*\)/g)
     if (sin) for (const s of sin) input = genericFunction(input, s, Math.sin)
+    */
 
+    input = input.replaceAll('sin', 'Math.sin')
     return input
 }
 
 function cos(input) {
+    /*
     const cos = input.match(/cos\([^\)]*\)/g)
     if (cos) for (const c of cos) input = genericFunction(input, c, Math.cos)
+    */
 
+    input = input.replaceAll('cos', 'Math.cos')
     return input
 }
 
 function tan(input) {
+    /*
     const tan = input.match(/tan\([^\)]*\)/g)
     if (tan) for (const t of tan) input = genericFunction(input, t, Math.tan)
+    */
 
+    input = input.replaceAll('tan', 'Math.tan')
     return input
 }
 
 function power(input) {
-    const power = input.match(/[\d-.e]+\^-?[\d.e]+/g)
+    input = input.replaceAll('pow', 'Math.pow')
+    input = power2(input)
+    return input
+    const power = input.split(/\b[\+\-\*]/).filter((item) => {
+        return item.includes('^')
+    })
+    if (!input.matchAll(/[\+\-\*]/g)) power.push(input)
+    power.forEach((item) => {
+        const number = item.split('^')[0]
+        const exponent = item.split('^')[1]
+        input = input.replace(item, Math.pow(+number, +exponent))
+    })
+    return input
+}
+
+function power2(input) {
+    const power = input.match(/[\d-.e]+\^[\d-.e]+/g)
     if (power) {
         power.forEach((p) => {
             const powerNumber = p.split('^')[0]
             const powerExponent = p.split('^')[1]
             input = input.replace(p, Math.pow(+powerNumber, +powerExponent))
         })
-        input = everything(input)
+        //        input = everything(input)
     }
 
     return input
 }
 
 function abs(input) {
+    /*
     const abs = input.match(/\|.+\|/g)
     if (abs) for (const a of abs) input = genericFunction(input, a, Math.abs)
+    */
 
+    input = input.replaceAll('abs', 'Math.abs')
     return input
 }

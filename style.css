@@ -49,3 +49,12 @@ input {
 button {
     /* display: none; */
 }
+
+div.func {
+    width: 95%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
