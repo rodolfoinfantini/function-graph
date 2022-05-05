@@ -1,12 +1,14 @@
 export function inputToValidMath(input, x) {
-    input = input.replace(/(PI|pi)/g, Math.PI)
+    input = input.replace(/(PI|pi)/g, 'Math.PI')
 
     input = multiplications(input)
 
+    input = input.replaceAll('-x', -x)
     input = input.replaceAll('x', x)
-    input = input.replaceAll('--', '+')
 
+    console.log(input)
     input = everything(input)
+    console.log(input)
 
     return input
 }
