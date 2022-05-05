@@ -121,7 +121,7 @@ function power(input) {
 }
 
 function power2(input) {
-    const power = input.match(/[\d-.e]+\^[\d-.e]+/g)
+    /* const power = input.match(/[\d-.e]+\^[\d-.e]+/g)
     if (power) {
         power.forEach((p) => {
             const powerNumber = p.split('^')[0]
@@ -129,8 +129,9 @@ function power2(input) {
             input = input.replace(p, Math.pow(+powerNumber, +powerExponent))
         })
         //        input = everything(input)
-    }
+    } */
 
+    input = input.replaceAll('^', '**')
     return input
 }
 
