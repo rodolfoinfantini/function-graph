@@ -24,6 +24,7 @@ It generates the graph of the given math function. Using a self-made graph *"eng
 - -2x^2+3x+2
 - sqrt(cos(x+2)^sin(x^2))
 
+## Screenshots:
 ![x](/screenshots/x.png)
 ![factorial](/screenshots/factorial.png)
 ![sin](/screenshots/sin.png)
