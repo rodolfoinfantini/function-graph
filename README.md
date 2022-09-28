@@ -27,15 +27,15 @@ It generates the graph of the given math function. Using a self-made graph *"eng
 - sqrt(cos(x+2)^sin(x^2))
 
 ## Screenshots:
-- x
+- `x`
 ![x](/screenshots/x.png)
-- factorial(x)
+- `factorial(x)`
 ![factorial](/screenshots/factorial.png)
-- sin(x)
+- `sin(x)`
 ![sin](/screenshots/sin.png)
-- tan(x)
+- `tan(x)`
 ![tan](/screenshots/tan.png)
-- cos(5x * pi/180) * tan(2x) / sin(9x)
+- `cos(5x * pi/180) * tan(2x) / sin(9x)`
 ![sin cos tan](/screenshots/sin-cos-tan.png)
-- cos(5x * pi/180) * tan(2x) / sin(9x) + 0.05x^2
+- `cos(5x * pi/180) * tan(2x) / sin(9x) + 0.05x^2`
 ![sin cos tan xsquared](/screenshots/sin-cos-tan-xsquared.png)
