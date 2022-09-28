@@ -27,25 +27,9 @@ export default class Graph {
         const linesColor = 'rgba(255, 255, 255, 0.05)'
 
         const ySpacing = this.realHeight / this.height
-        // const xSpacing = this.realWidth / this.width
         const xSpacing = ySpacing
         this.width = Math.ceil(this.realWidth / xSpacing)
 
-        /* let xNumber = -(this.width / 2)
-        for (let i = 0; i <= this.width; i++) {
-            this.ctx.beginPath()
-            const x = i * xSpacing - this.realWidth / 2
-            const y = 0
-            if (xSpacing > 13) this.ctx.fillText(xNumber, x - 3, y + 15)
-
-            this.ctx.beginPath()
-            this.ctx.strokeStyle = linesColor
-            this.ctx.moveTo(x, -this.realHeight / 2)
-            this.ctx.lineTo(x, this.realHeight / 2)
-            this.ctx.stroke()
-
-            xNumber++
-        } */
         for (let i = 0; i < this.width / 2; i++) {
             this.ctx.beginPath()
             const x = i * xSpacing
