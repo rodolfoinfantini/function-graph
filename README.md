@@ -14,8 +14,8 @@ It generates the graph of the given math function.
 -   pow()
 
 ![x](/screenshots/x.png)
+![factorial](/screenshots/factorial.png)
 ![sin](/screenshots/sin.png)
 ![tan](/screenshots/tan.png)
-![factorial](/screenshots/factorial.png)
 ![sin cos tan](/screenshots/sin-cos-tan.png)
 ![sin cos tan xsquared](/screenshots/sin-cos-tan-xsquared.png)
