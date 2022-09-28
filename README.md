@@ -11,7 +11,7 @@ It generates the graph of the given math function.
 -   abs()
 -   factorial()
 -   pow()
--   + - * / ^
+-   +-*/^
 
 ## Examples:
 - sqrt(x)
