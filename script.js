@@ -1,6 +1,7 @@
 'use strict'
 import Graph from './Graph.js'
 import { inputToValidMath } from './functionManipulations.js'
+import {factorial} from './gamma.js'
 
 const precision = 0.1
 

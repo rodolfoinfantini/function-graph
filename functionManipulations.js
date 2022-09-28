@@ -3,8 +3,8 @@ export function inputToValidMath(input, x) {
 
     input = multiplications(input)
 
-    input = input.replaceAll('-x', `(${-x})`)
-    input = input.replaceAll('x', `(${x})`)
+    //input = input.replaceAll('-x', `(${-x})`)
+    //input = input.replaceAll('x', `(${x})`)
 
     input = everything(input)
 
