@@ -1,7 +1,7 @@
 # function-graph
 
-[Try it here!](https://sirvorak.github.io/function-graph/)
-It generates the graph of the given math function.
+[Click here to try it!](https://sirvorak.github.io/function-graph/)
+`It generates the graph of the given math function.`
 
 ## Operations you can use:
 -   sqrt()
