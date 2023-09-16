@@ -1,6 +1,6 @@
 # function-graph
 
-# [Click here to try it!](https://sirvorak.github.io/function-graph/)
+# [Click here to try it!](https://rodolfoinfantini.github.io/function-graph/)
 It generates the graph of the given math function. Using a self-made graph *"engine"*.
 
 ## Operations you can use:
